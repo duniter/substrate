@@ -130,8 +130,15 @@ pub async fn seal_block<B, BI, SC, C, E, TP, CIDP, P>(
 			.map_err(|err| Error::StringError(err.to_string()))
 			.await?;
 
-		if proposal.block.extrinsics().len() == inherents_len && !create_empty {
-			return Err(Error::EmptyTransactionPool)
+		// README: we need to hack this control to be able to create non-empty blocks in manual mode
+		// with BABE runtime This is due to the fact that BABE creates 2 digests (PreRuntime and
+		// Seal), while manual seal creates only one (Preruntime). So if we try to create a block
+		// containing only 1 user extrinsic (which we do all the time in our integration tests),
+		// this control returns an error and prevents our integration tests from working.
+		if proposal.block.extrinsics().len() < inherents_len && !create_empty {
+			return Err(Error::StringError(
+				"proposal.block.extrinsics().len() < inherents_len".to_owned(),
+			))
 		}
 
 		let (header, body) = proposal.block.deconstruct();
