@@ -451,50 +451,73 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
+	// #[pallet::genesis_config]
+	// pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
+	// 	pub balances: Vec<(T::AccountId, T::Balance)>,
+	// }
+
+	/// alternative genesis config to allow setting total issuance from outside
+	/// 
+	/// the accounts must not be initialized through pallet_balances
+	/// since accounts are managed by pallet_duniter_account 
 	#[pallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
-		pub balances: Vec<(T::AccountId, T::Balance)>,
+		pub total_issuance: T::Balance,
 	}
+
+	// #[cfg(feature = "std")]
+	// impl<T: Config<I>, I: 'static> Default for GenesisConfig<T, I> {
+	// 	fn default() -> Self {
+	// 		Self { balances: Default::default() }
+	// 	}
+	// }
 
 	#[cfg(feature = "std")]
 	impl<T: Config<I>, I: 'static> Default for GenesisConfig<T, I> {
 		fn default() -> Self {
-			Self { balances: Default::default() }
+			Self { total_issuance: Default::default() }
 		}
 	}
+
+	// #[pallet::genesis_build]
+	// impl<T: Config<I>, I: 'static> GenesisBuild<T, I> for GenesisConfig<T, I> {
+	// 	fn build(&self) {
+	// 		let total = self.balances.iter().fold(Zero::zero(), |acc: T::Balance, &(_, n)| acc + n);
+
+	// 		<TotalIssuance<T, I>>::put(total);
+
+	// 		for (_, balance) in &self.balances {
+	// 			assert!(
+	// 				*balance >= <T as Config<I>>::ExistentialDeposit::get(),
+	// 				"the balance of any account should always be at least the existential deposit.",
+	// 			)
+	// 		}
+
+	// 		// ensure no duplicates exist.
+	// 		let endowed_accounts = self
+	// 			.balances
+	// 			.iter()
+	// 			.map(|(x, _)| x)
+	// 			.cloned()
+	// 			.collect::<std::collections::BTreeSet<_>>();
+
+	// 		assert!(
+	// 			endowed_accounts.len() == self.balances.len(),
+	// 			"duplicate balances in genesis."
+	// 		);
+
+	// 		for &(ref who, free) in self.balances.iter() {
+	// 			frame_system::Pallet::<T>::inc_providers(who);
+	// 			assert!(T::AccountStore::insert(who, AccountData { free, ..Default::default() })
+	// 				.is_ok());
+	// 		}
+	// 	}
+	// }
 
 	#[pallet::genesis_build]
 	impl<T: Config<I>, I: 'static> GenesisBuild<T, I> for GenesisConfig<T, I> {
 		fn build(&self) {
-			let total = self.balances.iter().fold(Zero::zero(), |acc: T::Balance, &(_, n)| acc + n);
-
-			<TotalIssuance<T, I>>::put(total);
-
-			for (_, balance) in &self.balances {
-				assert!(
-					*balance >= <T as Config<I>>::ExistentialDeposit::get(),
-					"the balance of any account should always be at least the existential deposit.",
-				)
-			}
-
-			// ensure no duplicates exist.
-			let endowed_accounts = self
-				.balances
-				.iter()
-				.map(|(x, _)| x)
-				.cloned()
-				.collect::<std::collections::BTreeSet<_>>();
-
-			assert!(
-				endowed_accounts.len() == self.balances.len(),
-				"duplicate balances in genesis."
-			);
-
-			for &(ref who, free) in self.balances.iter() {
-				frame_system::Pallet::<T>::inc_providers(who);
-				assert!(T::AccountStore::insert(who, AccountData { free, ..Default::default() })
-					.is_ok());
-			}
+			<TotalIssuance<T, I>>::put(self.total_issuance);
 		}
 	}
 
