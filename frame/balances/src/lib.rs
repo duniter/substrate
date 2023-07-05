@@ -457,9 +457,9 @@ pub mod pallet {
 	// }
 
 	/// alternative genesis config to allow setting total issuance from outside
-	/// 
+	///
 	/// the accounts must not be initialized through pallet_balances
-	/// since accounts are managed by pallet_duniter_account 
+	/// since accounts are managed by pallet_duniter_account
 	#[pallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub total_issuance: T::Balance,
