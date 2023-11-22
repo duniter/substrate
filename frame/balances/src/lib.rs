@@ -704,7 +704,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Upgrade a specified account.
+		/*/// Upgrade a specified account.
 		///
 		/// - `origin`: Must be `Signed`.
 		/// - `who`: The account to be upgraded.
@@ -735,7 +735,7 @@ pub mod pallet {
 			} else {
 				Ok(Pays::Yes.into())
 			}
-		}
+		}*/
 
 		/// Alias for `transfer_allow_death`, provided only for name-wise compatibility.
 		///

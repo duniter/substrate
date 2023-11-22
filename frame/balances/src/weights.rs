@@ -55,7 +55,7 @@ pub trait WeightInfo {
 	fn force_transfer() -> Weight;
 	fn transfer_all() -> Weight;
 	fn force_unreserve() -> Weight;
-	fn upgrade_accounts(u: u32, ) -> Weight;
+	//fn upgrade_accounts(u: u32, ) -> Weight;
 }
 
 /// Weights for pallet_balances using the Substrate node and recommended hardware.
@@ -138,7 +138,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(1_u64))
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
-	/// Storage: System Account (r:999 w:999)
+	/*/// Storage: System Account (r:999 w:999)
 	/// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
 	/// The range of component `u` is `[1, 1000]`.
 	fn upgrade_accounts(u: u32, ) -> Weight {
@@ -152,7 +152,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads((1_u64).saturating_mul(u.into())))
 			.saturating_add(T::DbWeight::get().writes((1_u64).saturating_mul(u.into())))
 			.saturating_add(Weight::from_parts(0, 2603).saturating_mul(u.into()))
-	}
+	}*/
 }
 
 // For backwards compatibility and tests
@@ -234,7 +234,7 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads(1_u64))
 			.saturating_add(RocksDbWeight::get().writes(1_u64))
 	}
-	/// Storage: System Account (r:999 w:999)
+	/*/// Storage: System Account (r:999 w:999)
 	/// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
 	/// The range of component `u` is `[1, 1000]`.
 	fn upgrade_accounts(u: u32, ) -> Weight {
@@ -248,5 +248,5 @@ impl WeightInfo for () {
 			.saturating_add(RocksDbWeight::get().reads((1_u64).saturating_mul(u.into())))
 			.saturating_add(RocksDbWeight::get().writes((1_u64).saturating_mul(u.into())))
 			.saturating_add(Weight::from_parts(0, 2603).saturating_mul(u.into()))
-	}
+	}*/
 }
